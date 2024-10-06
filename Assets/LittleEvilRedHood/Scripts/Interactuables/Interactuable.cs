@@ -12,7 +12,7 @@ public enum InteractableType
 public class Interactable : MonoBehaviour
 {
     public Actor thisActor { get; private set; }
-    public InteractableType InteractableType { get; private set; }
+    public InteractableType InteractableType;
 
     private void Awake()
     {

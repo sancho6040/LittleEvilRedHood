@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Movemnt")]
     [SerializeField] private ParticleSystem _clickEffect;
+    [SerializeField] private ParticleSystem _targetClickEffect;
     [SerializeField] private LayerMask _clickLayer;
 
     private float _lookRotationSpeed = 8f;
@@ -48,10 +49,11 @@ public class PlayerController : MonoBehaviour
         {
             if (hit.transform.CompareTag("Interactable"))
             {
+                Debug.Log("hit interactable");
                 _target = hit.transform.GetComponent<Interactable>();
-                if (_clickEffect != null)
+                if (_targetClickEffect != null)
                 {
-                    Instantiate(_clickEffect, hit.point += new Vector3(0f, 0.1f, 0f), _clickEffect.transform.rotation);
+                    Instantiate(_targetClickEffect, hit.transform.position + new Vector3(0f, 0.1f, 0f), _clickEffect.transform.rotation);
                 }
             }
             else
