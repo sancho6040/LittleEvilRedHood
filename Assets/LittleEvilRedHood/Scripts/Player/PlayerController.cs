@@ -18,12 +18,12 @@ public class PlayerController : MonoBehaviour
     private float _lookRotationSpeed = 8f;
 
     [Header("Attack")]
+    public bool IsAttackActive = true;
     [SerializeField] float _attackSpeed = 1.5f;
     [SerializeField] float _attackDelay = 0.3f;
     [SerializeField] float _attackDistance = 1.5f;
     [SerializeField] int _attackDamage = 1;
     [SerializeField] ParticleSystem hitEffect;
-
 
     private bool _isPlayerBusy = false;
     private Interactable _target;
@@ -44,8 +44,9 @@ public class PlayerController : MonoBehaviour
 
     private void ClickToMove()
     {
+        Vector3 pos = _input.Main.TouchPosition.ReadValue<Vector2>();
         RaycastHit hit;
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100, _clickLayer))
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(pos), out hit, 100, _clickLayer)) //antes usaba Input.mousePosition
         {
             if (hit.transform.CompareTag("Interactable"))
             {
@@ -53,7 +54,7 @@ public class PlayerController : MonoBehaviour
                 _target = hit.transform.GetComponent<Interactable>();
                 if (_targetClickEffect != null)
                 {
-                    Instantiate(_targetClickEffect, hit.transform.position + new Vector3(0f, 0.1f, 0f), _clickEffect.transform.rotation);
+                    Instantiate(_targetClickEffect, hit.transform.position + new Vector3(0f, -0.8f, 0f), _clickEffect.transform.rotation);
                 }
             }
             else
@@ -101,9 +102,12 @@ public class PlayerController : MonoBehaviour
         switch (_target.InteractableType)
         {
             case InteractableType.Enemy:
-                _animator.SetTrigger("Attack");
-                Invoke(nameof(SendAttack), _attackDelay);
-                Invoke(nameof(ResetBusyState), _attackSpeed);
+                if (IsAttackActive)
+                {
+                    _animator.SetTrigger("Attack");
+                    Invoke(nameof(SendAttack), _attackDelay);
+                    Invoke(nameof(ResetBusyState), _attackSpeed);
+                }
                 break;
 
             case InteractableType.Item:
@@ -119,7 +123,7 @@ public class PlayerController : MonoBehaviour
     {
         if (_target == null) return;
 
-        if(_target.thisActor._currentHealth <= 0)
+        if (_target.thisActor._currentHealth <= 0)
         {
             _target = null;
             return;
@@ -140,7 +144,7 @@ public class PlayerController : MonoBehaviour
         if (_agent.destination == transform.position) return;
 
         Vector3 facing = Vector3.zero;
-        if(_target != null)
+        if (_target != null)
         {
             facing = _target.transform.position;
         }
