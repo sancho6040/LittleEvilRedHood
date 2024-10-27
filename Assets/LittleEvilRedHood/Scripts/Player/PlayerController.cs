@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     private NavMeshAgent _agent;
     private Animator _animator;
 
-    [Header("Movemnt")]
+    [Header("Movement")]
     [SerializeField] private ParticleSystem _clickEffect;
     [SerializeField] private ParticleSystem _targetClickEffect;
     [SerializeField] private LayerMask _clickLayer;
