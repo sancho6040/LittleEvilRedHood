@@ -64,6 +64,7 @@ public class BasicEnemie : MonoBehaviour
             }
         }
         return puntoAleatorio;
+
     }
 
     void OnTriggerEnter(Collider other)
