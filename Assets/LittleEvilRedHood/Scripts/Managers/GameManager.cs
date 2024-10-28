@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -9,13 +10,26 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     [Header("UI elements")]
-    public TMP_Text MissionUI;
-    public TMP_Text TopMissionUI;
-    public Button MissionCompleteButton;
+    public FadingPanel MissionUI;
+    public FadingPanel TopMissionUI;
+    public FadingPanel EndModalUI;
+    public FadingPanel LoseModalUI;
 
     [Header("Game Actors")]
     private PlayerController _player;
     private List<BasicEnemie> _enemiesList;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
 
     private void Start()
     {
@@ -29,7 +43,7 @@ public class GameManager : MonoBehaviour
         _enemiesList.Remove(inEnemie);
         if (_enemiesList.Count <= 0)
         {
-            StartCoroutine(EndGame());
+            EndGame();
         }
     }
 
@@ -40,28 +54,35 @@ public class GameManager : MonoBehaviour
         //---------- muestra la mision --------------
         MissionUI.gameObject.SetActive(true);
         TopMissionUI.gameObject.SetActive(true);
-        TopMissionUI.CrossFadeAlpha(0f, 0f, false);
+        MissionUI.FadeIn(0.5f);
         yield return new WaitForSeconds(2f);
 
-        MissionUI.CrossFadeAlpha(0f, 0.5f, false);
+        MissionUI.FadeOut(0.5f);
+        TopMissionUI.FadeIn(0.5f);
+
         yield return new WaitForSeconds(0.5f);
-        TopMissionUI.CrossFadeAlpha(1f, 0.5f, false);
         MissionUI.gameObject.SetActive(false);
 
         //---------- Activa al jugador --------------
         _player.IsControlsActive = true;
     }
 
-    private IEnumerator EndGame()
+    private void EndGame()
     {
         _player.IsControlsActive = false;
+        EndModalUI.FadeIn(0.5f);
+    }
 
-        MissionUI.gameObject.SetActive(true);
-        MissionUI.text = "Mission completa!";
-        TopMissionUI.CrossFadeAlpha(1f, 0.5f, false);
-        yield return new WaitForSeconds(0.5f);
-        MissionCompleteButton.gameObject.SetActive(true);
+    public void GameLost()
+    {
+        LoseModalUI.gameObject.SetActive(true);
+        LoseModalUI.FadeIn(0.5f);
+    }
 
+    public void RestartGame()
+    {
+        int index = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(index);
     }
 
     public void PauseGame()
@@ -71,6 +92,11 @@ public class GameManager : MonoBehaviour
     public void UnpauseGame()
     {
         Time.timeScale = 1f;
+    }
+
+    public void ExitGame()
+    {
+        SceneManager.LoadScene(0);
     }
 
     private void OnDestroy()

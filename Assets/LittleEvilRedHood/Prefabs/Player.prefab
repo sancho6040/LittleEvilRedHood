@@ -98,6 +98,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHealth: 3
   _currentHealth: 0
+  IsPlayer: 1
 --- !u!114 &8889415526788146305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -116,7 +117,7 @@ MonoBehaviour:
   _clickLayer:
     serializedVersion: 2
     m_Bits: 448
-  IsAttackActive: 0
+  IsAttackActive: 1
   _attackSpeed: 1.5
   _attackDelay: 0.3
   _attackDistance: 1.5

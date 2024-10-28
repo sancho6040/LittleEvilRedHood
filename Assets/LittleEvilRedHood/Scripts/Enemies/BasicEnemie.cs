@@ -79,9 +79,20 @@ public class BasicEnemie : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            _isPlayerOnSight = true;
-            transform.LookAt(other.transform);
-            StartCoroutine(DispararProyectil(other.transform.position));
+            RaycastHit hit;
+            Vector3 directionToPlayer = other.transform.position - transform.position;
+
+            if (Physics.Raycast(transform.position, directionToPlayer, out hit))
+            {
+                //revisa que no haya nada bloqueando la vista del enemigo al jugador
+                if (hit.collider.CompareTag("Player"))
+                {
+                    _isPlayerOnSight = true;
+                    transform.LookAt(other.transform);
+                    StartCoroutine(DispararProyectil(other.transform.position));
+                }
+
+            }
         }
     }
 
@@ -106,7 +117,7 @@ public class BasicEnemie : MonoBehaviour
         {
             GameObject proyectil = Instantiate(ProyectilePrefab, ShootPosition.position, Quaternion.identity);
             proyectil.GetComponent<Proyectile>().SetObjetivo(objetivo);
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1f);
         }
     }
 
