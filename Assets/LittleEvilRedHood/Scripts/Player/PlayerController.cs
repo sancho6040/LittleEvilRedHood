@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     private Animator _animator;
 
     [Header("Movement")]
+    public bool IsControlsActive = true;
     [SerializeField] private ParticleSystem _clickEffect;
     [SerializeField] private ParticleSystem _targetClickEffect;
     [SerializeField] private LayerMask _clickLayer;
@@ -44,6 +45,8 @@ public class PlayerController : MonoBehaviour
 
     private void ClickToMove()
     {
+        if(!IsControlsActive) return;
+
         Vector3 pos = _input.Main.TouchPosition.ReadValue<Vector2>();
         RaycastHit hit;
         if (Physics.Raycast(Camera.main.ScreenPointToRay(pos), out hit, 100, _clickLayer)) //antes usaba Input.mousePosition

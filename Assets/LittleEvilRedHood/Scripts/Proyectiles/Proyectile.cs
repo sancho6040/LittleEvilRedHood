@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class Proyectile : MonoBehaviour
 {
+    public float Speed = 1;
+    public int Damage = 1;
+
     private Vector3 _target;
+
     public void SetObjetivo(Vector3 target)
     {
         _target = target;
         // Puedes ajustar la velocidad del proyectil aquí si es necesario
-        GetComponent<Rigidbody>().velocity = (target - transform.position).normalized * 10f;
+        GetComponent<Rigidbody>().velocity = (target - transform.position).normalized * Speed;
     }
 
     void OnCollisionEnter(Collision colision)
@@ -19,7 +23,7 @@ public class Proyectile : MonoBehaviour
             Actor jugador = colision.gameObject.GetComponent<Actor>();
             if (jugador != null)
             {
-                jugador.TakeDamage(10);  // Ajusta el valor de daño según sea necesario
+                jugador.TakeDamage(Damage);
             }
             Destroy(gameObject);
         }

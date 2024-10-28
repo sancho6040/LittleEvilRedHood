@@ -6,6 +6,7 @@ public class Actor : MonoBehaviour
 {
     public int MaxHealth;
     public int _currentHealth;
+    public bool IsPlayer;
 
     private void Awake()
     {
@@ -20,6 +21,18 @@ public class Actor : MonoBehaviour
 
     private void Death()
     {
+        if (IsPlayer)
+        {
+            GameManager.Instance?.GameLost();
+        }
+        else
+        {
+            BasicEnemie basicEnemie = GetComponent<BasicEnemie>();
+            if (basicEnemie != null)
+            {
+                GameManager.Instance?.EnemieCaptured(basicEnemie);
+            }
+        }
         Destroy(gameObject);
     }
 }
