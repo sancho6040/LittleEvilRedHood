@@ -11,8 +11,10 @@ public class AudioManager : MonoBehaviour
     [Header("Audio Source")]
     public AudioClip backGround;
     public AudioClip death;
-    public AudioClip damage;
-    public AudioClip attack;
+    public AudioClip playerhurt;
+    public AudioClip playerattack;
+    public AudioClip enemyhurt;
+    public AudioClip enemyattack;
 
     private void Start()
     {
