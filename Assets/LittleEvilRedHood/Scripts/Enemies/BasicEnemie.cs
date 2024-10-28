@@ -80,6 +80,7 @@ public class BasicEnemie : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             _isPlayerOnSight = true;
+            transform.LookAt(other.transform);
             StartCoroutine(DispararProyectil(other.transform.position));
         }
     }
