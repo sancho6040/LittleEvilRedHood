@@ -22,6 +22,7 @@ public class BasicEnemie : MonoBehaviour
     private NavMeshAgent _agent;
     private bool _hasDestination;
     private bool _isPlayerOnSight;
+    private Animator _animator;
 
     [Header("Ennemie Attack")]
     public GameObject ProyectilePrefab;
@@ -31,6 +32,7 @@ public class BasicEnemie : MonoBehaviour
     private void Start()
     {
         _agent = GetComponent<NavMeshAgent>();
+        _animator = GetComponent<Animator>();
 
         SetPatrolDestination();
     }
@@ -45,7 +47,10 @@ public class BasicEnemie : MonoBehaviour
                 _hasDestination = true; //evita llamar varias veces esta logica
             }
         }
-
+        if (_agent != null)
+        {
+            _animator?.SetFloat("Speed", _agent.velocity.magnitude);
+        }
     }
 
     public void SetPatrolDestination()
@@ -117,6 +122,7 @@ public class BasicEnemie : MonoBehaviour
         {
             GameObject proyectil = Instantiate(ProyectilePrefab, ShootPosition.position, Quaternion.identity);
             proyectil.GetComponent<Proyectile>().SetObjetivo(objetivo);
+            _animator.SetTrigger("Attack");
             yield return new WaitForSeconds(1f);
         }
     }
